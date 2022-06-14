@@ -1,29 +1,20 @@
-{:main[
-       {:des "caps_lock to left_control when held",
-       :rules [[:##caps_lock :left_control nil {:alone :caps_lock}]]
-        }
-       {:des "tab to left_option when held",
-       :rules [[:##tab :left_option nil {:alone :tab}]]
-       }
-      {:des "hold q for utils mode"
-       :rules [
-               [:q ["utils-mode" 1] nil {:afterup ["utils-mode" 0] :alone :q}]
-               [:h :left_arrow ["utils-mode" 1]]
-               [:j :down_arrow ["utils-mode" 1]]
-               [:k :up_arrow ["utils-mode" 1]]
-               [:l :right_arrow ["utils-mode" 1]]
-               [:m :return_or_enter ["utils-mode" 1]]
-               [:i :home ["utils-mode" 1]]
-               [:o :end ["utils-mode" 1]]
-               [:semicolon :!Oquote ["utils-mode" 1]]
-               [:quote :!Oo ["utils-mode" 1]]
-               [:open_bracket :!Oa ["utils-mode" 1]]
-               [:slash :!Qslash ["utils-mode" 1]]
-               [:comma :delete_or_backspace ["utils-mode" 1]]
-               [:period :delete_forward ["utils-mode" 1]]
+{
+ :simlayers {
+  :d-mode {:key :d}
+  :number-mode {:key :w}
+  :symbols-mode {:key :a}
+  ; :shift-symbols-mode {:key :!Sa}
+} ;; simlayers
 
-               ]
-       }
+ :main [
+        {:des "caps_lock to left_control when held",
+         :rules [[:##caps_lock :left_control nil {:alone :caps_lock}]]
+         }
+
+        {:des "tab to left_option when held",
+         :rules [[:##tab :left_option nil {:alone :tab}]]
+         }
+
 
       {:des "hold !Sz for number-mode"
        :rules [
@@ -61,22 +52,98 @@
        }
 ]}
 
+        {:des "remove habits"
+         :rules [
+         [:!S9 :fn]
+         [:!S0 :fn]
+         [:!Sopen_bracket :fn]
+         [:!Sclose_bracket :fn]
+         ]
+         }
 
-    ;; !  | means mandatory -   modifier(s) alone when pressend change behavior
-    ;; #  | means optional  -   modifiers are optional (but atleast one necessary)
+        {:des    "symbols"
+         :rules  [:symbols-mode
+         [:j     :!S9             :symbols-mode]
+         [:k     :!S0             :symbols-mode]
+         [:!Sj   :open_bracket    :symbols-mode]
+         [:!Sk   :close_bracket   :symbols-mode]
+         [:m     :!Sopen_bracket  :symbols-mode]
+         [:comma :!Sclose_bracket :symbols-mode]
+          ]}
 
-    ;; :!Ca is keycode :a and prefix a with !C
+        {:des "numpad"
+         :rules    [:number-mode
+         [:o      :9 :number-mode]
+         [:i      :8 :number-mode]
+         [:u      :7 :number-mode]
+         [:l      :6 :number-mode]
+         [:k      :5 :number-mode]
+         [:j      :4 :number-mode]
+         [:period :3 :number-mode]
+         [:comma  :2 :number-mode]
+         [:m      :1 :number-mode]
+         [:slash  :0 :number-mode]
+         ]}
 
-    ;; C  | left_command
-    ;; T  | left_control
-    ;; O  | left_option
-    ;; S  | left_shift
-    ;; F  | fn
-    ;; Q  | right_command
-    ;; W  | right_control
-    ;; E  | right_option
-    ;; R  | right_shift
+        {:des "hold q for utils mode"
+         :rules [
+          [:q [["utils-mode" 1] ["q-down" 1]] nil {:afterup [["q-down" 0] ["utils-mode" 0] ["number-mode" 0]] :alone :q}]
+          [:h :left_arrow ["utils-mode" 1]]
+          [:j :down_arrow ["utils-mode" 1]]
+          [:k :up_arrow ["utils-mode" 1]]
+          [:l :right_arrow ["utils-mode" 1]]
+          [:!Sh :!Sleft_arrow ["utils-mode" 1]]
+          [:!Sj :!Sdown_arrow ["utils-mode" 1]]
+          [:!Sk :!Sup_arrow ["utils-mode" 1]]
+          [:!Sl :!Sright_arrow ["utils-mode" 1]]
+          [:m :return_or_enter ["utils-mode" 1]]
+          [:i :home ["utils-mode" 1]]
+          [:o :end ["utils-mode" 1]]
+          [:semicolon :!Oquote ["utils-mode" 1]]
+          [:quote :!Oo ["utils-mode" 1]]
+          [:open_bracket :!Oa ["utils-mode" 1]]
+          [:slash :!Qslash ["utils-mode" 1]]
+          [:comma :delete_or_backspace ["utils-mode" 1]]
+          [:period :delete_forward ["utils-mode" 1]]
+        ]}
+]}
 
-    ;; ## | optional any (this has no effect when used on the RHS; only LHS)
-    ;; !! | command + control + optional + shift (hyper)
 
+
+;{:main[
+;       {:des "quick bracket/braces sequences"
+;        :rules [:d-mode
+;          [ :i [:close_bracket ["dmode-i" 0]] ["dmode-i" 1] ]
+;          [ :i [["dmode-i" 1]] nil { :delayed { :invoked  [["dmode-i" 0] :open_bracket] :canceled [["dmode-i" 0]] } } ]
+;          [ :o [:!Sclose_bracket ["dmode-o" 0]] ["dmode-o" 1] ]
+;          [ :o [["dmode-o" 1]] nil { :delayed { :invoked  [["dmode-o" 0] :!Sopen_bracket] :canceled [["dmode-o" 0]] } } ]
+;          [ :k [:!S0 ["dmode-k" 0]] ["dmode-k" 1] ]
+;          [ :k [["dmode-k" 1]] nil { :delayed { :invoked  [["dmode-k" 0] :!S9] :canceled [["dmode-k" 0]] } } ]
+;
+;    ]}
+;
+;       {:des "caps_lock to left_control when held",
+;       :rules [[:##caps_lock :left_control nil {:alone :caps_lock}]]
+;        }
+;       {:des "tab to left_option when held",
+;       :rules [[:##tab :left_option nil {:alone :tab}]]
+;
+;
+;    ;; !  | means mandatory -   modifier(s) alone when pressend change behavior
+;    ;; #  | means optional  -   modifiers are optional (but atleast one necessary)
+;
+;    ;; :!Ca is keycode :a and prefix a with !C
+;
+;    ;; C  | left_command
+;    ;; T  | left_control
+;    ;; O  | left_option
+;    ;; S  | left_shift
+;    ;; F  | fn
+;    ;; Q  | right_command
+;    ;; W  | right_control
+;    ;; E  | right_option
+;    ;; R  | right_shift
+;
+;    ;; ## | optional any (this has no effect when used on the RHS; only LHS)
+;    ;; !! | command + control + optional + shift (hyper)
+;
