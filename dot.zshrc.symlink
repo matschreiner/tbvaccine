@@ -12,7 +12,7 @@ eval "$(pyenv init -)" # Lets us call pyenv shell python
 # --------------------
 alias tmux-dev='$HOME/dotfiles/tmux-dev.sh'
 alias activate='source venv/bin/activate'
-alias new-venv='python -m venv venv; activate; pip install --upgrade --quiet pip '
+alias new-venv='python -m venv venv; activate; pip install --upgrade --quiet pip; pip install pdbpp'
 alias backup='rsync -a ~/pipelines/ ~/pipelines_backup'
 alias refresh='source $HOME/.zshrc'
 alias "combine_pdf"="/System/Library/Automator/Combine PDF Pages.action/Contents/Resources/join.py" -o
