@@ -1,5 +1,7 @@
-" General settings
+"ee General settings
 "
+"
+
 
 echo "(>^.^<)"
 set nocompatible
@@ -28,12 +30,12 @@ filetype off
 
 let @s="100|2hbi\"\\\<CR>f\"\<Esc>"
 
+let g:cursorline=1
 
 " Have numbers on the active window
 augroup BgHighlight
     autocmd!
     autocmd WinEnter,BufRead * set nu rnu
-
     autocmd WinLeave * setlocal nonu nornu
 augroup END
 
@@ -45,13 +47,27 @@ set statusline=%f
 " Keymappings
 let mapleader = ","
 
+
+" NORMAL MAPS
+" Zoom in Zoom out
+nnoremap zi :NERDTreeClose<Cr><C-W>\|<C-W>\_
+nnoremap zo :NERDTree<Cr><C-W>=
+" Turbomove
+nnoremap J 5j
+nnoremap K 5k
+nnoremap L 5l
+nnoremap H 5h
+" Gitgutter
+noremap <leader>gp <Plug>(GitGutterPreviewHunk)
+noremap <leader>gu <Plug>(GitGutterUndoHunk)
+noremap <leader>gj <Plug>(GitGutterNextHunk)
+noremap <leader>gk <Plug>(GitGutterPrevHunk)
 " delete that doesn't occupy register
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>r :checktime<CR>:so $MYVIMRC<CR>
-nnoremap <leader>v :e $MYVIMRC<CR>
+nnoremap <leader>v :vsplit $MYVIMRC<CR>
 nnoremap <leader>V :!e $MYVIMRC<CR>
 nnoremap <leader>b :Isort <cr> :Black <cr>
-noremap / :set hlsearch <cr> /
 noremap <leader>/ :set hlsearch!<CR>
 noremap <leader><C-V> :set paste!<CR>
 nnoremap <leader>j J
@@ -68,43 +84,84 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-B>  :YcmCompleter GoToDeclaration <CR>
+nnoremap <leader>tmp :e /tmp/tmp.py<CR>
+nnoremap <leader>tmv :vsplit /tmp/tmp.py<CR>
 
 nnoremap - ddp
 nnoremap _ ddkkp
 
 noremap <C-X> :call NERDComment(-1,"toggle")<CR>
 
-" Zoom in Zoom out
-noremap zi :NERDTreeClose<Cr><C-W>\|<C-W>\_
-noremap zo :NERDTree<Cr><C-W>=
-
-" Turbomove
-noremap J 5j
-noremap K 5k
-noremap L 5l
-noremap H 5h
-
+" INSERT MAPS
 inoremap jk <ESC>
 inoremap JK <ESC>
 inoremap Jk <ESC>
 inoremap jK <ESC>
+inoremap >> <Plug>(copilot-next)
+inoremap << <Plug>(copilot-previous)
 
+" OPERATOR MAPS
+onoremap <leader>b i(
+onoremap <leader>r i[
+onoremap <leader>B i{
+
+" VISUAL MAPS
+vnoremap <leader>x "_x
 vnoremap <leader>p "\xp<cr>
 vnoremap <leader>rl y:s/<C-R>"//g<left><left>
 vnoremap <leader>rg y:%s/<C-R>"//g<left><left>
 vnoremap <leader>rc y:%s/<C-R>"//gc<left><left><left>
 vnoremap <leader>ry :s/<C-R>"//g<left><left>
+nnoremap <leader>pb a(<esc>A)
+vnoremap <leader>cl :s/\d*\n/ /<cr>V"+yu
+vnoremap <leader>ofr sopen(x, 'r')<esc>Fxvp
+vnoremap <leader>ofw sopen(x, 'w')<esc>Fxvp
+vnoremap <leader>ofa sopen(x, 'a')<esc>Fxvp
+vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>wl
+vnoremap <leader>arg xmai()<esc>P`ai
+vnoremap <leader>next snxt = next(<esc>pa.__iter__())<esc>
 
-onoremap ( i(
-onoremap [ i[
-onoremap { i{
+" Turbomove
+vnoremap J 5j
+vnoremap K 5k
+vnoremap L 5l
+vnoremap H 5h
+" Easy Align
+vmap <leader>ga <Plug>(EasyAlign)*
+vnoremap <leader>delme s# TODO delme ##########<cr>#######################<esc>kp
 
 
+
+
+func Eatchar(pat)
+  let c = nr2char(getchar(0))
+  return (c =~ a:pat) ? '' : c
+endfunc
+
+iabbr ifs if ()<esc>:call Eatchar('\s')<CR>i
 " Abbreviations
+iabbr lsfd def list_full_dir(d):<cr>return [os.path.join(d, f) for f in os.listdir(d)]
+
+
+
 iabbr bp __import__("pdb").set_trace() #TODO delme
-iabbr pytarg from argparse import ArgumentParser<cr><cr><cr>def main(args): # pylint: disable=redefined-outer-name<cr><tab>...<cr><cr><cr><bs>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr>parser.add_argument()<cr>args = parser.parse_args()<cr><cr>main(args)<esc>8k
+iabbr pytarg <cr><cr><up><up>from argparse import ArgumentParser<cr><cr><cr>def main(args):<cr><esc>d/\n.<cr>mao<cr><esc>Go<home><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
 iabbr pypejob from pype import BaseConfig<cr><cr><cr>class Config(BaseConfig):<cr>script_path = ...<cr>outputs = {}<cr><bs><cr><cr>def main(config):<cr>pass
 iabbr delme # TODO delme ##########<cr>#######################
+
+iabbr def defz():<esc>?z<cr>xi
+iabbr confinp config['inputs']['']<esc><left>
+iabbr confout config['outputs']['']<esc><left>
+iabbr confpar config['params']['']<esc><left>
+iabbr fmtoff # fmt: off
+iabbr fmton # fmt: on
+iabbr for: for in :<esc>4<left>
+iabbr sysexit __import__("sys").exit() #TODO delme
+
+iabbr imnp import numpy as np
+iabbr implt import matplotlib.pyplot as plt
+iabbr impl import pytorch_lightning as pl
+
 
 " source .vimrc after saving it
 au bufwritepost .vimrc source $MYVIMRC
@@ -124,24 +181,28 @@ au Filetype python
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'jpalardy/vim-slime' " Plugin 'vim-slime'
-Plugin 'scrooloose/nerdtree' " Nerdtree
 Plugin 'vim-scripts/indentpython.vim' " Proper indentation
 Plugin 'unblevable/quick-scope' " Highligt first unique letter
 Plugin 'morhetz/gruvbox' " Colorscheme
-Plugin 'psf/black' " Black
 Plugin 'junegunn/fzf', { 'do': './install --bin' } " Rg
 Plugin 'junegunn/fzf.vim' "fzf
 Plugin 'junegunn/vim-easy-align'
+Plugin 'psf/black' " Black
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat' " Let Vim Surround repeat actions
-Plugin 'vim-syntastic/syntastic' " for linting
+Plugin 'dense-analysis/ale'
 Plugin 'Krasjet/auto.pairs' " autocompletion of paranthesis
 Plugin 'airblade/vim-gitgutter'
 Plugin 'Valloric/YouCompleteMe' " Autocompletion and jump to definition
 Plugin 'preservim/nerdcommenter' " Comment
+Plugin 'preservim/nerdtree' " Comment
 Plugin 'davidhalter/jedi-vim'
 Plugin 'fisadev/vim-isort'
+Plugin 'github/copilot.vim'
+Plugin 'nvim-tree/nvim-tree.lua'
+Plugin 'nvim-tree/nvim-web-devicons' " optional, for file icons
 call vundle#end()
+" Plugin 'vim-syntastic/syntastic' " for linting
 
 " Jedi
 " ====
@@ -176,34 +237,31 @@ let g:NERDCommentEmptyLines = 1
 
 " Nerd tree
 " =========
-let g:NERDTreeWinSize=37
+"let g:NERDTreeWinSize=37
 
 " YouCompleteMe
 " =============
 let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_goto_buffer_command = 'new-tab'
 
-" Easy Align
-" ==========
-nmap ga <Plug>(EasyAlign)
-xmap ga <Plug>(EasyAlign)
+
+" xnoremap ga <Plug>(EasyAlign)<cr>*
+
 
 " GitGutter
 " =========
-nmap <leader>gp <Plug>(GitGutterPreviewHunk)
-nmap <leader>gu <Plug>(GitGutterUndoHunk)
-nmap <leader>gj <Plug>(GitGutterNextHunk)
-nmap <leader>gk <Plug>(GitGutterPrevHunk)
-
 nmap <leader>gg :GitGutterToggle <cr>
 let g:gitgutter_enabled = 0
 
 
 " FZF
 " ===
-let $FZF_DEFAULT_COMMAND='rg --files --follow'
+let $FZF_DEFAULT_COMMAND='rg --files'
+"command! -bang -nargs=? -complete=dir Files
+"			\ call fzf#vim#files(<q-args>, {'options': ['--tiebreak', 'end', '--info=inline', '--preview', 'bat --color=always --style=numbers {}']}, <bang>0)
 
 command! -bang -nargs=? -complete=dir Files
-			\ call fzf#vim#files(<q-args>, {'options': ['--tiebreak', 'end', '--info=inline', '--preview', 'bat --color=always --style=numbers {}']}, <bang>0)
+	\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
