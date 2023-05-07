@@ -61,3 +61,5 @@ alias "dftb+"="/usr/local/Caskroom/miniforge/base/bin/dftb+"
 # Aliases
 # -------
 alias asegui='"$(pyenv shell miniforge3-4.10.1-5; ase gui)"'
+alias wandboff='WANDB_MODE=disabled'
+alias wandbon='WANDB_MODE=online'

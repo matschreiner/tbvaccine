@@ -58,10 +58,18 @@ nnoremap K 5k
 nnoremap L 5l
 nnoremap H 5h
 " Gitgutter
-noremap <leader>gp <Plug>(GitGutterPreviewHunk)
-noremap <leader>gu <Plug>(GitGutterUndoHunk)
-noremap <leader>gj <Plug>(GitGutterNextHunk)
-noremap <leader>gk <Plug>(GitGutterPrevHunk)
+nnoremap gp <Plug>(GitGutterPreviewHunk)
+nnoremap gu <Plug>(GitGutterUndoHunk)
+nnoremap gs <Plug>(GitGutterStageHunk)
+nnoremap ( <Plug>(GitGutterNextHunk)
+nnoremap ) <Plug>(GitGutterPrevHunk)
+"LazyGit
+nnoremap gl :LazyGit<cr>
+"Fugitive
+"nnoremap gc :Git commit<cr>
+
+nnoremap gc :FloatermNew nvim -c ":Git commit" +only<cr>
+
 " delete that doesn't occupy register
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>r :checktime<CR>:so $MYVIMRC<CR>
@@ -71,10 +79,11 @@ nnoremap <leader>b :Isort <cr> :Black <cr>
 noremap <leader>/ :set hlsearch!<CR>
 noremap <leader><C-V> :set paste!<CR>
 nnoremap <leader>j J
-nnoremap <leader>. :<up><cr>
+nnoremap <leader>. @q
 nnoremap ' "_
-nnoremap <leader>pi $A # pylint: disable=<Esc>"+p
+nnoremap <leader>pi $A  # pylint: disable=<Esc>"+p
 
+" FZF/rg
 nnoremap <leader>f :Files <CR>
 nnoremap <leader>s :Rg <CR>
 
@@ -86,9 +95,14 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <C-B>  :YcmCompleter GoToDeclaration <CR>
 nnoremap <leader>tmp :e /tmp/tmp.py<CR>
 nnoremap <leader>tmv :vsplit /tmp/tmp.py<CR>
+nnoremap <leader>ntz :NERDTreeClose<cr>:let g:NERDTreeWinSize=62<cr>:NERDTree<cr>
+nnoremap <leader>ntr :NERDTreeClose<cr>:let g:NERDTreeWinSize=31<cr>:NERDTree<cr>
+nnoremap <leader>nc A # pylint: disable=not-callable<esc>
+nnoremap <leader>S :SlimeConfig<cr><C-U>default<cr>1
 
-nnoremap - ddp
-nnoremap _ ddkkp
+nnoremap - :buffers<CR>:buffer<Space>
+nnoremap <silent>  :Buffers<CR>
+
 
 noremap <C-X> :call NERDComment(-1,"toggle")<CR>
 
@@ -101,9 +115,9 @@ inoremap >> <Plug>(copilot-next)
 inoremap << <Plug>(copilot-previous)
 
 " OPERATOR MAPS
-onoremap <leader>b i(
-onoremap <leader>r i[
-onoremap <leader>B i{
+onoremap <leader>p i(
+onoremap <leader>b i[
+onoremap <leader>c i{
 
 " VISUAL MAPS
 vnoremap <leader>x "_x
@@ -117,9 +131,15 @@ vnoremap <leader>cl :s/\d*\n/ /<cr>V"+yu
 vnoremap <leader>ofr sopen(x, 'r')<esc>Fxvp
 vnoremap <leader>ofw sopen(x, 'w')<esc>Fxvp
 vnoremap <leader>ofa sopen(x, 'a')<esc>Fxvp
-vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>wl
+vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>A:
 vnoremap <leader>arg xmai()<esc>P`ai
-vnoremap <leader>next snxt = next(<esc>pa.__iter__())<esc>
+vnoremap <leader>next snext(<esc>pa.__iter__())<esc>
+vnoremap <leader>pytarg >O<esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
+vnoremap <leader>ifmain >O<esc>Iif __name__ == "__main__":<cr>main()
+vnoremap <leader>fmtoff dO# fmt: off<cr># fmt: on<esc>P
+vnoremap <leader>try Itry:<cr><esc>oexcept:<cr>__import__("pdb").set_trace() #TODO delme<esc>
+
+
 
 " Turbomove
 vnoremap J 5j
@@ -138,18 +158,19 @@ func Eatchar(pat)
   return (c =~ a:pat) ? '' : c
 endfunc
 
+iabbr pytarg ...<esc>V,pytarg
 iabbr ifs if ()<esc>:call Eatchar('\s')<CR>i
 " Abbreviations
 iabbr lsfd def list_full_dir(d):<cr>return [os.path.join(d, f) for f in os.listdir(d)]
 
-
-
 iabbr bp __import__("pdb").set_trace() #TODO delme
-iabbr pytarg <cr><cr><up><up>from argparse import ArgumentParser<cr><cr><cr>def main(args):<cr><esc>d/\n.<cr>mao<cr><esc>Go<home><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
 iabbr pypejob from pype import BaseConfig<cr><cr><cr>class Config(BaseConfig):<cr>script_path = ...<cr>outputs = {}<cr><bs><cr><cr>def main(config):<cr>pass
-iabbr delme # TODO delme ##########<cr>#######################
+iabbr delme # TODO delme ##########<cr>#######################<esc>O
 
+iabbr class classz():<esc>?z<cr>xi
 iabbr def defz():<esc>?z<cr>xi
+iabbr cdef defz(self, ):<esc>?z<cr>xi
+
 iabbr confinp config['inputs']['']<esc><left>
 iabbr confout config['outputs']['']<esc><left>
 iabbr confpar config['params']['']<esc><left>
@@ -161,6 +182,10 @@ iabbr sysexit __import__("sys").exit() #TODO delme
 iabbr imnp import numpy as np
 iabbr implt import matplotlib.pyplot as plt
 iabbr impl import pytorch_lightning as pl
+iabbr slef self
+iabbr ifmain if __name__ == "__main__":<cr>
+iabbr definit def __init__(self,z):<esc>?z<cr>xi
+iabbr superinit super().__init__()
 
 
 " source .vimrc after saving it
@@ -179,8 +204,11 @@ au Filetype python
 " Plugins
 " =======
 call vundle#begin()
+
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'voldikss/vim-floaterm'
 Plugin 'jpalardy/vim-slime' " Plugin 'vim-slime'
+Plugin 'kdheepak/lazygit.nvim'
 Plugin 'vim-scripts/indentpython.vim' " Proper indentation
 Plugin 'unblevable/quick-scope' " Highligt first unique letter
 Plugin 'morhetz/gruvbox' " Colorscheme
@@ -190,6 +218,7 @@ Plugin 'junegunn/vim-easy-align'
 Plugin 'psf/black' " Black
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat' " Let Vim Surround repeat actions
+Plugin 'tpope/vim-fugitive'
 Plugin 'dense-analysis/ale'
 Plugin 'Krasjet/auto.pairs' " autocompletion of paranthesis
 Plugin 'airblade/vim-gitgutter'
@@ -218,7 +247,6 @@ let g:jedi#completions_command = ""
 let g:jedi#rename_command = "<leader>R"
 
 
-
 " Slime
 " =====
 let g:slime_target = "tmux"
@@ -238,6 +266,17 @@ let g:NERDCommentEmptyLines = 1
 " Nerd tree
 " =========
 "let g:NERDTreeWinSize=37
+"
+"
+" LazyGit
+" =======
+let g:lazygit_floating_window_winblend = 0 " transparency of floating window
+let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
+let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
+let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
+let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
+
+
 
 " YouCompleteMe
 " =============
@@ -250,8 +289,7 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " GitGutter
 " =========
-nmap <leader>gg :GitGutterToggle <cr>
-let g:gitgutter_enabled = 0
+let g:gitgutter_enabled = 1
 
 
 " FZF
@@ -301,4 +339,3 @@ augroup python
                 \   syn keyword pythonExceptions self
                 \ | highlight def link pythonExceptions Special
 augroup end
-
