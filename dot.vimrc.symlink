@@ -61,14 +61,17 @@ nnoremap H 5h
 nnoremap gp <Plug>(GitGutterPreviewHunk)
 nnoremap gu <Plug>(GitGutterUndoHunk)
 nnoremap gs <Plug>(GitGutterStageHunk)
-nnoremap ( <Plug>(GitGutterNextHunk)
-nnoremap ) <Plug>(GitGutterPrevHunk)
 "LazyGit
 nnoremap gl :LazyGit<cr>
 "Fugitive
 "nnoremap gc :Git commit<cr>
 
-nnoremap gc :FloatermNew nvim -c ":Git commit" +only<cr>
+nnoremap - :ALENext<cr>
+nnoremap _ :ALEPrevious<cr>
+
+nnoremap = <Plug>(GitGutterNextHunk)
+nnoremap + <Plug>(GitGutterPrevHunk)
+
 
 " delete that doesn't occupy register
 nnoremap <leader>w :set wrap!<CR>
@@ -76,8 +79,8 @@ nnoremap <leader>r :checktime<CR>:so $MYVIMRC<CR>
 nnoremap <leader>v :vsplit $MYVIMRC<CR>
 nnoremap <leader>V :!e $MYVIMRC<CR>
 nnoremap <leader>b :Isort <cr> :Black <cr>
-noremap <leader>/ :set hlsearch!<CR>
-noremap <leader><C-V> :set paste!<CR>
+nnoremap <leader>/ :set hlsearch!<CR>
+nnoremap <leader><C-V> :set paste!<CR>
 nnoremap <leader>j J
 nnoremap <leader>. @q
 nnoremap ' "_
@@ -99,10 +102,6 @@ nnoremap <leader>ntz :NERDTreeClose<cr>:let g:NERDTreeWinSize=62<cr>:NERDTree<cr
 nnoremap <leader>ntr :NERDTreeClose<cr>:let g:NERDTreeWinSize=31<cr>:NERDTree<cr>
 nnoremap <leader>nc A # pylint: disable=not-callable<esc>
 nnoremap <leader>S :SlimeConfig<cr><C-U>default<cr>1
-
-nnoremap - :buffers<CR>:buffer<Space>
-nnoremap <silent>  :Buffers<CR>
-
 
 noremap <C-X> :call NERDComment(-1,"toggle")<CR>
 
