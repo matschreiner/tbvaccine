@@ -60,13 +60,13 @@
          }
 
         {:des    "symbols"
-         :rules  [:symbols-mode
-         [:j     :!S9             :symbols-mode]
-         [:k     :!S0             :symbols-mode]
-         [:!Sj   :open_bracket    :symbols-mode]
-         [:!Sk   :close_bracket   :symbols-mode]
-         [:m     :!Sopen_bracket  :symbols-mode]
-         [:comma :!Sclose_bracket :symbols-mode]
+         :rules   [:symbols-mode
+         [:k      :!S9             :symbols-mode]
+         [:l      :!S0             :symbols-mode]
+         [:i      :open_bracket    :symbols-mode]
+         [:o      :close_bracket   :symbols-mode]
+         [:comma  :!Sopen_bracket  :symbols-mode]
+         [:period :!Sclose_bracket :symbols-mode]
           ]}
 
         ; {:des "numpad"
