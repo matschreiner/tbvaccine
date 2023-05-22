@@ -47,6 +47,8 @@
                [:u :7 ["number-mode" 1]]
                [:i :8 ["number-mode" 1]]
                [:o :9 ["number-mode" 1]]
+               [:n :comma ["number-mode" 1]]
+               [:h :period ["number-mode" 1]]
                ]
        }
 
