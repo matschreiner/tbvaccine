@@ -1,71 +1,36 @@
-"ee General settings
+" General settings
 "
-
 echo "(>^.^<)"
+
 set nocompatible
 filetype plugin indent on
 set splitright
 set nowrap
+let mapleader = ","
 
 " Settings
 " ========
 set rtp+=~/.vim/bundle/Vundle.vim
 set number
 set encoding=utf-8
-
 set autoread
 set autowrite
 
 " Indentation
-" ===========
+filetype plugin indent on
 set sts=4
 set ts=4
 set sw=4
-let mapleader = ","
-set updatetime=100
-set statusline=%f
-set autoread
-filetype off
+set expandtab
+set autoindent
 
-
-augroup AddCursorLine
-	autocmd!
-	autocmd BufEnter,WinEnter * setlocal cursorline
-	autocmd BufLeave,WinLeave * setlocal nocursorline
-augroup end
-
-" Have numbers on the active window
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter,BufRead * set nu rnu
-    autocmd WinLeave * setlocal nonu nornu
-augroup END
-
-lua << EOF
-require'lspconfig'.pylsp.setup{}
-EOF
 nnoremap <silent> <leader>h :lua vim.lsp.buf.hover()<CR>
-
 
 " Gitgutter
 nnoremap gt :GitGutterToggle<cr>
 nnoremap gp <Plug>(GitGutterPreviewHunk)
 nnoremap gu <Plug>(GitGutterUndoHunk)
-nnoremap gs <Plug>(GitGutterStageHunk)
-"LazyGit
-nnoremap gl :LazyGit<cr>
-"Fugitive
-"nnoremap gcc :Git commit --quiet<cr>
-"nnoremap gca :Git commit --amend --quiet<cr>
-"nnoremap gP :Git push --amend --quiet<cr>
 
-" nnoremap - :ALENext<cr>
-" nnoremap _ :ALEPrevious<cr>
-" nnoremap = <Plug>(GitGutterNextHunk)
-" nnoremap + <Plug>(GitGutterPrevHunk)
-
-
-" delete that doesn't occupy register
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>r :checktime<CR>:so $MYVIMRC<CR>
 nnoremap <leader>v :vsplit $MYVIMRC<CR>
@@ -102,32 +67,32 @@ inoremap jK <ESC>
 inoremap >> <Plug>(copilot-next)
 inoremap << <Plug>(copilot-previous)
 
-" OPERATOR MAPS
-onoremap <leader>p i(
-onoremap <leader>b i[
-onoremap <leader>c i{
+" CLIPBOARD
+vnoremap <leader>j "+p
+vnoremap <leader>d "+d
+vnoremap <leader>y "+y
+nnoremap <leader>p "+p
+nnoremap <leader>d "+d
+nnoremap <leader>y "+y
 
-" VISUAL MAPS
-vnoremap <leader>x "_x
-vnoremap <leader>p "\xp<cr>
+" REPLACE
 vnoremap <leader>rl y:s/<C-R>"//g<left><left>
 vnoremap <leader>rg y:%s/<C-R>"//g<left><left>
 vnoremap <leader>rc y:%s/<C-R>"//gc<left><left><left>
 vnoremap <leader>ry :s/<C-R>"//g<left><left>
-nnoremap <leader>pb a(<esc>A)
+
 vnoremap <leader>ofr sopen(x, 'r')<esc>Fxvp
 vnoremap <leader>ofw sopen(x, 'w')<esc>Fxvp
 vnoremap <leader>ofa sopen(x, 'a')<esc>Fxvp
+
 vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>
 vnoremap <leader>arg xmai()<esc>P`ai
 vnoremap <leader>next snext(iter(<esc>pa))<esc>
-vnoremap <leader>pytarg >O<esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
-vnoremap <leader>ifmain >O<esc>Iif __name__ == "__main__":<cr>main()
 vnoremap <leader>fmtoff dO# fmt: off<cr># fmt: on<esc>P
 vnoremap <leader>try Itry:<cr><esc>oexcept:<cr>__import__("pdb").set_trace() #TODO delme<esc>
-vnoremap """ "+y
 
-
+vnoremap <leader>pytarg >O<esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
+vnoremap <leader>ifmain >O<esc>Iif __name__ == "__main__":<cr>main()
 
 " Turbomove
 " Normalmode
@@ -135,7 +100,7 @@ nnoremap J 5j
 nnoremap K 5k
 nnoremap L 5l
 nnoremap H 5h
-" Visuallmode
+" Visualmode
 vnoremap J 5j
 vnoremap K 5k
 vnoremap L 5l
@@ -146,58 +111,23 @@ nnoremap _ :ALEPrevious<cr>
 
 " Easy Align
 vnoremap <leader>ga <Plug>(EasyAlign)*
-vnoremap <leader>delme s# TODO delme ##########<cr>#######################<esc>kp
 
-
-
-func Eatchar(pat)
-  let c = nr2char(getchar(0))
-  return (c =~ a:pat) ? '' : c
-endfunc
-
-iabbr pytarg ...<esc>V,pytarg
-iabbr ifs if ()<esc>:call Eatchar('\s')<CR>i
-" Abbreviations
-iabbr lsfd def list_full_dir(d):<cr>return [os.path.join(d, f) for f in os.listdir(d)]
-au FileType python :iabbr <buffer> iff if:<left><space>
+iabbr slef self
 
 iabbr bp __import__("pdb").set_trace() #TODO delme
-iabbr pypejob from pype import BaseConfig<cr><cr><cr>class Config(BaseConfig):<cr>script_path = ...<cr>outputs = {}<cr><bs><cr><cr>def main(config):<cr>pass
-iabbr delme # TODO delme ##########<cr>#######################<esc>O
+iabbr sysexit __import__("sys").exit() #TODO delme
 
 iabbr class classz():<esc>?z<cr>xi
 iabbr def defz():<esc>?z<cr>xi
 iabbr cdef defz(self, ):<esc>?z<cr>xi
-
-iabbr confinp config['inputs']['']<esc><left>
-iabbr confout config['outputs']['']<esc><left>
-iabbr confpar config['params']['']<esc><left>
-iabbr fmtoff # fmt: off
-iabbr fmton # fmt: on
-iabbr for: for in :<esc>4<left>
-iabbr sysexit __import__("sys").exit() #TODO delme
-
-iabbr imnp import numpy as np
-iabbr implt import matplotlib.pyplot as plt
-iabbr impl import pytorch_lightning as pl
-iabbr slef self
 iabbr ifmain if __name__ == "__main__":<cr>
 iabbr definit def __init__(self,z):<esc>?z<cr>xi
 iabbr superinit super().__init__()
 
+iabbr imnp import numpy as np
+iabbr implt import matplotlib.pyplot as plt
+iabbr impl import pytorch_lightning as pl
 
-" source .vimrc after saving it
-au bufwritepost ~/.vimrc source $MYVIMRC
-au bufwritepre * :%s/\s\+$//e
-
-" PEP8
-au Filetype python
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix |
 
 " Plugins
 " =======
@@ -219,21 +149,20 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'dense-analysis/ale'
 Plugin 'Krasjet/auto.pairs' " autocompletion of paranthesis
 Plugin 'airblade/vim-gitgutter'
-Plugin 'Valloric/YouCompleteMe' " Autocompletion and jump to definition
 Plugin 'preservim/nerdcommenter' " Comment
 Plugin 'preservim/nerdtree' " Comment
 Plugin 'fisadev/vim-isort'
 Plugin 'nvim-tree/nvim-tree.lua'
 Plugin 'nvim-tree/nvim-web-devicons' " optional, for file icons
 Plugin 'github/copilot.vim'
-Plugin 'neovim/nvim-lspconfig'
-" Plugin 'davidhalter/jedi-vim'
+Plugin 'Valloric/YouCompleteMe' " Autocompletion and jump to definition
 call vundle#end()
+" Plugin 'neovim/nvim-lspconfig'
 " Plugin 'vim-syntastic/syntastic' " for linting
 
 " Jedi
 " ====
-
+" Plugin 'davidhalter/jedi-vim'
 " let g:jedi#show_call_signatures = "1"
 " let g:jedi#popup_on_dot = "0"
 " let g:jedi#goto_command = ""
@@ -266,7 +195,6 @@ let g:NERDCompactSexyComs = 1
 let g:NERDTrimTrailingWhitespace = 1
 let g:NERDCommentBadWhitespace = 1
 vnoremap <C-x> <Plug>NERDCommenterToggle
-nnoremap <C-x> <Plug>NERDCommenterToggle
 
 " Nerd tree
 " =========
@@ -275,11 +203,6 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeDirArrows = 1
-
-" Nerd tree
-" =========
-"let g:NERDTreeWinSize=37
-"
 "
 " LazyGit
 " =======
@@ -289,23 +212,14 @@ let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " cust
 let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
 let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
 
-
-
-
-
 " YouCompleteMe
 " =============
 let g:ycm_autoclose_preview_window_after_insertion = 1
 " let g:ycm_goto_buffer_command = 'new-tab'
 
-
-" xnoremap ga <Plug>(EasyAlign)<cr>*
-
-
 " GitGutter
 " =========
 let g:gitgutter_enabled = 0
-
 
 
 " FZF
@@ -348,12 +262,20 @@ endif
 " =======
 syntax on
 
-" Have python highlight self
-augroup python
-    autocmd!
-    autocmd FileType python
-                \   syn keyword pythonExceptions self
-                \ | highlight def link pythonExceptions Special
+augroup python_settings
+  autocmd!
+  autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab autoindent
+  autocmd FileType python syn keyword Self self | highlight def link Self Special
+augroup END
+
+augroup AddCursorLine
+	autocmd!
+	autocmd BufEnter,WinEnter * setlocal cursorline
+	autocmd BufLeave,WinLeave * setlocal nocursorline
 augroup end
 
-
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter,BufRead * set nu rnu
+    autocmd WinLeave * setlocal nonu nornu
+augroup END
