@@ -16,19 +16,23 @@ set encoding=utf-8
 set autoread
 set autowrite
 
-" indentation
+" Indentation
+" ===========
 set sts=4
 set ts=4
 set sw=4
+let mapleader = ","
 set updatetime=100
-
-" Autoread files whenever they are being changed outside vim
+set statusline=%f
 set autoread
 filetype off
 
-let @s="100|2hbi\"\\\<CR>f\"\<Esc>"
 
-let g:cursorline=1
+augroup AddCursorLine
+	autocmd!
+	autocmd BufEnter,WinEnter * setlocal cursorline
+	autocmd BufLeave,WinLeave * setlocal nocursorline
+augroup end
 
 " Have numbers on the active window
 augroup BgHighlight
@@ -37,19 +41,12 @@ augroup BgHighlight
     autocmd WinLeave * setlocal nonu nornu
 augroup END
 
-
-au FileType python :iabbr <buffer> iff if:<left><space>
-
-set statusline=%f
-
-" Keymappings
-let mapleader = ","
+lua << EOF
+require'lspconfig'.pylsp.setup{}
+EOF
+nnoremap <silent> <leader>h :lua vim.lsp.buf.hover()<CR>
 
 
-" NORMAL MAPS
-" Zoom in Zoom out
-nnoremap zi :NERDTreeClose<Cr><C-W>\|<C-W>\_
-nnoremap zo :NERDTree<Cr><C-W>=
 " Gitgutter
 nnoremap gt :GitGutterToggle<cr>
 nnoremap gp <Plug>(GitGutterPreviewHunk)
@@ -58,11 +55,9 @@ nnoremap gs <Plug>(GitGutterStageHunk)
 "LazyGit
 nnoremap gl :LazyGit<cr>
 "Fugitive
-nnoremap gcc :Git commit --quiet<cr>
-nnoremap gca :Git commit --amend --quiet<cr>
-nnoremap gP :Git push --amend --quiet<cr>
-
-
+"nnoremap gcc :Git commit --quiet<cr>
+"nnoremap gca :Git commit --amend --quiet<cr>
+"nnoremap gP :Git push --amend --quiet<cr>
 
 " nnoremap - :ALENext<cr>
 " nnoremap _ :ALEPrevious<cr>
@@ -74,12 +69,9 @@ nnoremap gP :Git push --amend --quiet<cr>
 nnoremap <leader>w :set wrap!<CR>
 nnoremap <leader>r :checktime<CR>:so $MYVIMRC<CR>
 nnoremap <leader>v :vsplit $MYVIMRC<CR>
-nnoremap <leader>V :!e $MYVIMRC<CR>
 nnoremap <leader>b :Isort <cr> :Black <cr>
 nnoremap <leader>/ :set hlsearch!<CR>
-nnoremap <leader><C-V> :set paste!<CR>
 nnoremap <leader>j J
-nnoremap <leader>. @q
 nnoremap ' "_
 nnoremap <leader>pi $A  # pylint: disable=<Esc>"+p
 
@@ -102,8 +94,6 @@ nnoremap <leader>nc A # pylint: disable=not-callable<esc>
 nnoremap <leader>S :SlimeConfig<cr><C-U>default<cr>1
 nnoremap <leader>c :let @+ = expand('%')<cr>
 
-noremap <C-X> :call NERDComment(-1,"toggle")<CR>
-
 " INSERT MAPS
 inoremap jk <ESC>
 inoremap JK <ESC>
@@ -125,17 +115,17 @@ vnoremap <leader>rg y:%s/<C-R>"//g<left><left>
 vnoremap <leader>rc y:%s/<C-R>"//gc<left><left><left>
 vnoremap <leader>ry :s/<C-R>"//g<left><left>
 nnoremap <leader>pb a(<esc>A)
-vnoremap <leader>cl :s/\d*\n/ /<cr>V"+yu
 vnoremap <leader>ofr sopen(x, 'r')<esc>Fxvp
 vnoremap <leader>ofw sopen(x, 'w')<esc>Fxvp
 vnoremap <leader>ofa sopen(x, 'a')<esc>Fxvp
-vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>A:
+vnoremap <leader>enum senumerate()<esc>P?for\s<cr>3lai, <esc>/enumerate<cr>
 vnoremap <leader>arg xmai()<esc>P`ai
 vnoremap <leader>next snext(iter(<esc>pa))<esc>
 vnoremap <leader>pytarg >O<esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>
 vnoremap <leader>ifmain >O<esc>Iif __name__ == "__main__":<cr>main()
 vnoremap <leader>fmtoff dO# fmt: off<cr># fmt: on<esc>P
 vnoremap <leader>try Itry:<cr><esc>oexcept:<cr>__import__("pdb").set_trace() #TODO delme<esc>
+vnoremap """ "+y
 
 
 
@@ -155,9 +145,8 @@ nnoremap - :ALENext<cr>
 nnoremap _ :ALEPrevious<cr>
 
 " Easy Align
-vmap <leader>ga <Plug>(EasyAlign)*
+vnoremap <leader>ga <Plug>(EasyAlign)*
 vnoremap <leader>delme s# TODO delme ##########<cr>#######################<esc>kp
-
 
 
 
@@ -170,6 +159,7 @@ iabbr pytarg ...<esc>V,pytarg
 iabbr ifs if ()<esc>:call Eatchar('\s')<CR>i
 " Abbreviations
 iabbr lsfd def list_full_dir(d):<cr>return [os.path.join(d, f) for f in os.listdir(d)]
+au FileType python :iabbr <buffer> iff if:<left><space>
 
 iabbr bp __import__("pdb").set_trace() #TODO delme
 iabbr pypejob from pype import BaseConfig<cr><cr><cr>class Config(BaseConfig):<cr>script_path = ...<cr>outputs = {}<cr><bs><cr><cr>def main(config):<cr>pass
@@ -232,11 +222,12 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'Valloric/YouCompleteMe' " Autocompletion and jump to definition
 Plugin 'preservim/nerdcommenter' " Comment
 Plugin 'preservim/nerdtree' " Comment
-"  Plugin 'davidhalter/jedi-vim'
 Plugin 'fisadev/vim-isort'
-Plugin 'github/copilot.vim'
 Plugin 'nvim-tree/nvim-tree.lua'
 Plugin 'nvim-tree/nvim-web-devicons' " optional, for file icons
+Plugin 'github/copilot.vim'
+Plugin 'neovim/nvim-lspconfig'
+" Plugin 'davidhalter/jedi-vim'
 call vundle#end()
 " Plugin 'vim-syntastic/syntastic' " for linting
 
@@ -244,8 +235,7 @@ call vundle#end()
 " ====
 
 " let g:jedi#show_call_signatures = "1"
-" nnoremap <leader>d :call jedi#show_documentation()<CR>
-" let g:jedi#popup_on_dot = "1"
+" let g:jedi#popup_on_dot = "0"
 " let g:jedi#goto_command = ""
 " let g:jedi#goto_assignments_command = ""
 " let g:jedi#goto_stubs_command = ""
@@ -271,6 +261,20 @@ set t_Co=256
 " ==============
 let g:NERDDefaultAlign = 'left'
 let g:NERDCommentEmptyLines = 1
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDCommentBadWhitespace = 1
+vnoremap <C-x> <Plug>NERDCommenterToggle
+nnoremap <C-x> <Plug>NERDCommenterToggle
+
+" Nerd tree
+" =========
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
 
 " Nerd tree
 " =========
@@ -284,6 +288,8 @@ let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating
 let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
 let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
 let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
+
+
 
 
 
