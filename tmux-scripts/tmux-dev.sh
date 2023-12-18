@@ -15,6 +15,8 @@ fi
 
 ~/dotfiles/tmux-scripts/start-vim.sh
 
+activate_venv
+
 tmux split-window -v
 activate_venv
 
