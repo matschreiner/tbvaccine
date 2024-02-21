@@ -2,3 +2,4 @@ vim.symlink/bundle
 *.swp
 *.swo
 configs/nvim/lazy-lock.json
+configs/nvim/.luarc.json
