@@ -1,3 +1,4 @@
 vim.symlink/bundle
 *.swp
 *.swo
+configs/nvim/lazy-lock.json
