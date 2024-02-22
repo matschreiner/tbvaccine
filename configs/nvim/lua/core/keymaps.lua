@@ -1,21 +1,21 @@
-vim.g.mapleader = ' '
+vim.g.mapleader = " "
 local keymap = vim.keymap
 
 -- Escape
-keymap.set('i', 'jk', '<ESC>')
-keymap.set('i', 'JK', '<ESC>')
+keymap.set("i", "jk", "<ESC>")
+keymap.set("i", "JK", "<ESC>")
 
--- Turbomove 
-keymap.set({'n', 'v'}, 'J', '5j')
-keymap.set({'n', 'v'}, 'K', '5k')
-keymap.set({'n', 'v'}, 'L', '5l')
-keymap.set({'n', 'v'}, 'H', '5h')
+-- Turbomove
+keymap.set({ "n", "v" }, "J", "5j")
+keymap.set({ "n", "v" }, "K", "5k")
+keymap.set({ "n", "v" }, "L", "5l")
+keymap.set({ "n", "v" }, "H", "5h")
 
 -- Navigate between windows
-keymap.set('n', '<C-J>', '<C-W><C-J>')
-keymap.set('n', '<C-K>', '<C-W><C-K>')
-keymap.set('n', '<C-L>', '<C-W><C-L>')
-keymap.set('n', '<C-H>', '<C-W><C-H>')
+keymap.set("n", "<C-J>", "<C-W><C-J>")
+keymap.set("n", "<C-K>", "<C-W><C-K>")
+keymap.set("n", "<C-L>", "<C-W><C-L>")
+keymap.set("n", "<C-H>", "<C-W><C-H>")
 
 -- Window Management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
