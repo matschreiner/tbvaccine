@@ -1,5 +1,4 @@
-export ZSH="/Users/jamas/.oh-my-zsh"
-
+export ZSH=".oh-my-zsh"
 
 # Setup Pyenv
 # -----------
@@ -15,30 +14,12 @@ alias activate='source venv/bin/activate'
 alias new-venv='python -m venv venv; activate; pip install --upgrade --quiet pip; pip install pdbpp'
 
 
-# Setup ripgrep
-# -------------------------
-alias rgf='rg --files | rg'
-
-
-# Setup FZF
-# ---------
-export ZSH_DISABLE_COMPFIX=true
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-alias -g pw="fzf --color 'border:#008080' --preview 'bat --color=always --style=numbers {}' --bind shift-up:preview-up,shift-down:preview-down"
-export FZF_DEFAULT_COMMAND='rg --files'
-# alias -g Z='| fzf'
-
-
 # Setup Plugins for zsh
 # ---------------------
 ZSH_THEME="robbyrussell"
-plugins=(git zsh-syntax-highlighting fzf)
+plugins=(
+	git 
+	# zsh-syntax-highlighting 
+	# fzf
+)
 source $ZSH/oh-my-zsh.sh
-
-
-# Run neofetch at startup if we are in tmux
-# -----------------------------------------
-if [[ -n $TMUX ]]
-then
-	neofetch
-fi
