@@ -1,5 +1,6 @@
 export ZSH="/Users/jamas/.oh-my-zsh"
 
+
 # Setup Pyenv
 # -----------
 export PYENV_ROOT="$HOME/.pyenv"
@@ -10,14 +11,8 @@ eval "$(pyenv init -)" # Lets us call pyenv shell python
 
 # Setup custom aliases
 # --------------------
-alias tmux-dev='$HOME/dotfiles/tmux-dev.sh'
 alias activate='source venv/bin/activate'
 alias new-venv='python -m venv venv; activate; pip install --upgrade --quiet pip; pip install pdbpp'
-alias backup='rsync -a ~/pipelines/ ~/pipelines_backup'
-alias refresh='source $HOME/.zshrc'
-alias "combine_pdf"="/System/Library/Automator/Combine PDF Pages.action/Contents/Resources/join.py" -o
-alias re='cd ~/phd/research'
-alias te='cd ~/phd/research/train-ensemble'
 
 
 # Setup ripgrep
@@ -47,19 +42,3 @@ if [[ -n $TMUX ]]
 then
 	neofetch
 fi
-
-
-# Add paths for ORCA DFTB and MPI
-# -------------------------------
-export PATH=/Users/jamas/Library/Orca420:$PATH; export LD_LIBRARY_PATH=/Users/jamas/Library/Orca420:$LD_LIBRARY_PATH
-OPENMPI_PATH=/usr/local/Cellar/open-mpi/4.1.1_2/bin
-export PATH=$OPENMPI_PATH:$PATH; export LD_LIBRARY_PATH=$OPENMPI_PATH/lib:$LD_LIBRARY_PATH
-export ASE_ORCA_COMMAND='/Users/jamas/Library/Orca420'
-alias "dftb+"="/usr/local/Caskroom/miniforge/base/bin/dftb+"
-
-
-# Aliases
-# -------
-alias asegui='"$(pyenv shell miniforge3-4.10.1-5; ase gui)"'
-alias wandboff='WANDB_MODE=disabled'
-alias wandbon='WANDB_MODE=online'
