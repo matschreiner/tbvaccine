@@ -22,11 +22,15 @@ return {
       },
     })
     telescope.load_extension("fzf")
+    telescope.load_extension("dir")
+
 
     -- set keymaps
     vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
     vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
     vim.keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     vim.keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
+    vim.keymap.set("n", "<leader>fdf", "<cmd>Telescope dir live_grep<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>fds", "<cmd>Telescope dir find_files<CR>", { noremap = true, silent = true })
   end
 }
