@@ -1,3 +1,4 @@
 [MAIN]
 disable=
-    missing-docstring
+    missing-docstring,
+    import-error
