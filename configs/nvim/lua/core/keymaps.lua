@@ -17,6 +17,13 @@ keymap.set("n", "<C-K>", "<C-W><C-K>")
 keymap.set("n", "<C-L>", "<C-W><C-L>")
 keymap.set("n", "<C-H>", "<C-W><C-H>")
 
+-- System clipboard
+keymap.set("v", "<leader>y", '"+y')
+keymap.set("n", "<leader>p", '"+p')
+keymap.set("n", "<C-K>", "<C-W><C-K>")
+keymap.set("n", "<C-L>", "<C-W><C-L>")
+keymap.set("n", "<C-H>", "<C-W><C-H>")
+
 -- Window Management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
@@ -31,12 +38,14 @@ keymap.set("n", "<leader>tk", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 keymap.set("n", "<leader>/", "<cmd>set hlsearch!<CR>", { desc = "Toggle search highlight" }) -- toggle search highlight
 keymap.set("n", "/", "<cmd>set hlsearch<CR>/", { desc = "Toggle search highlight" }) -- toggle search highlight
-keymap.set("v", "<leader>enum","senumerate()<esc>P?for\\s<cr>3lai, <esc>/enumerate<cr>")
+keymap.set("v", "<leader>enum", "senumerate()<esc>P?for\\s<cr>3lai, <esc>/enumerate<cr>")
 keymap.set("v", "<leader>arg", "xmai()<esc>P`ai")
 keymap.set("v", "<leader>next", "snext(iter(<esc>pa))<esc>")
 
-vim.cmd[[iabbr bp __import__("pdb").set_trace() #TODO delme]]
-vim.cmd[[iabbr sysexit __import__("sys").exit() #TODO delme]]
-vim.cmd[[iabbr imnp import numpy as np]]
-vim.cmd[[iabbr implt import matplotlib.pyplot as plt]]
-vim.cmd[[iabbr pytargs <esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>]]
+vim.cmd([[iabbr bp __import__("pdb").set_trace() #TODO delme]])
+vim.cmd([[iabbr sysexit __import__("sys").exit() #TODO delme]])
+vim.cmd([[iabbr imnp import numpy as np]])
+vim.cmd([[iabbr implt import matplotlib.pyplot as plt]])
+vim.cmd(
+	[[iabbr pytargs <esc>I<cr><cr><cr>def main(args):<esc>ggOfrom argparse import ArgumentParser<esc>Go<esc>I<cr><cr>if __name__ == "__main__":<cr>parser = ArgumentParser()<cr># parser.add_argument('arg')<cr># parser.add_argument('--kwarg')<cr><cr>main(parser.parse_args())<esc>`ai<tab>]]
+)
