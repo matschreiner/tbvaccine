@@ -11,7 +11,7 @@ return {
 		telescope.setup({
 			defaults = {
 				path_display = { "truncate " },
-                file_ignore_patterns = { "venv", "node_modules", ".git" },
+				file_ignore_patterns = { "venv", "node_modules", ".git" },
 			},
 		})
 		telescope.load_extension("fzf")
