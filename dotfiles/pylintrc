@@ -1,4 +1,8 @@
 [MAIN]
 disable=
     missing-docstring,
-    import-error
+    import-error,
+    unspecified-encoding,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals
