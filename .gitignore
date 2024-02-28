@@ -3,3 +3,5 @@ vim.symlink/bundle
 *.swo
 configs/nvim/lazy-lock.json
 configs/nvim/.luarc.json
+venv
+a.py
