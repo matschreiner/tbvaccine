@@ -1,0 +1,19 @@
+snippet pytarg "basic python"
+from argparse import ArgumentParser
+
+
+def main(args):  # pylint: disable=unused-argument
+	$1
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+
+    # fmt: off
+    # parser.add_argument("arg",     default="default", help="help")
+    # parser.add_argument("--kwarg", default="default", help="help")
+    # parser.add_argument("--flag",  action="store_true", help="help")
+    # fmt: on
+
+    main(parser.parse_args())
+endsnippet
