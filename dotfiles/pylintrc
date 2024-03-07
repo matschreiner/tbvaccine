@@ -5,4 +5,7 @@ disable=
     unspecified-encoding,
     too-few-public-methods,
     too-many-arguments,
-    too-many-locals
+    too-many-locals,
+    too-many-instance-attributes,
+    line-too-long,
+    too-many-statements
