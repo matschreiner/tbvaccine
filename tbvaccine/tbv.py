@@ -24,7 +24,9 @@ class State:
 
 class TBVaccine:
     TB_END_RE = re.compile(r"^(?P<exception>[\w\.]+)\: (?P<description>.*?)$")
-    TB_FILE_RE = re.compile(r'^  File "(?P<filename>.*?)", line (?P<line>\d+), in (?P<func>.*)$')
+    TB_FILE_RE = re.compile(
+        r'^  File "(?P<filename>.*?)", line (?P<line>\d+), in (?P<func>.*)$'
+    )
     VAR_PREFIX = "|     "
 
     def __init__(self, code_dir=None, isolate=True, show_vars=True, max_length=120):
@@ -55,7 +57,9 @@ class TBVaccine:
         self._load_config()
 
         self.pygments_lexer = PythonLexer()
-        self.pygments_formatter = TerminalFormatter(style=self._config.get("style", "color_scheme"))
+        self.pygments_formatter = TerminalFormatter(
+            style=self._config.get("style", "color_scheme")
+        )
 
     def _load_config(self):
         dir_path = user_config_dir("tbvaccine")
@@ -79,7 +83,9 @@ class TBVaccine:
             # Check if there's an ANSI escape in the last few chars of max_length and break before it.
             if "\x1b" in short_text[-10:]:
                 short_text = short_text[: short_text.rfind("\x1b")]
-            text = short_text + "\x1b[0m ... ({} more chars)".format(len(text) - len(short_text))
+            text = short_text + "\x1b[0m ... ({} more chars)".format(
+                len(text) - len(short_text)
+            )
         if fg or style:
             styles = {"bright": 1, None: 0}
             colors = {
@@ -103,7 +109,11 @@ class TBVaccine:
         """
         Decide whether the file in the traceback is one in our code_dir or not.
         """
-        return self._file.startswith(self._code_dir) or (sys.platform != "win32" and not self._file.startswith("/"))
+        if "site-packages" in self._file:
+            return False
+        return self._file.startswith(self._code_dir) or (
+            sys.platform != "win32" and not self._file.startswith("/")
+        )
 
     def _process_var_line(self, line):
         """
@@ -217,14 +227,18 @@ class TBVaccine:
 
             max_length = max([len(x[0]) for x in var_tuples])
             for key, val in var_tuples:
-                if type(val) in (type(lambda: None), type(sys)) or (key.startswith("__") and key.endswith("__")):
+                if type(val) in (type(lambda: None), type(sys)) or (
+                    key.startswith("__") and key.endswith("__")
+                ):
                     # We don't want to print functions or modules or __variables__.
                     continue
                 try:
                     val = str(val)
                 except:  # noqa
                     val = "<CANNOT CONVERT VALUE>"
-                lines.append("%s%s = %s" % (self.VAR_PREFIX, key.ljust(max_length), val))
+                lines.append(
+                    "%s%s = %s" % (self.VAR_PREFIX, key.ljust(max_length), val)
+                )
         lines.append("%s: %s" % (value.__class__.__name__, value))
         return "".join(self._process_line(line) for line in lines)
 
