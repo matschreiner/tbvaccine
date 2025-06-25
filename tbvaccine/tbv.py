@@ -29,31 +29,17 @@ class TBVaccine:
     )
     VAR_PREFIX = "|     "
 
-    def __init__(self, code_dir=None, isolate=True, show_vars=True, max_length=120):
-        # The directory we're interested in.
+    def __init__(self, code_dir=None, isolate=True, show_vars=False, max_length=120):
         if not code_dir:
             code_dir = os.getcwd()
         self._code_dir = code_dir
 
-        # Whether to print interesting lines in color or not. If False,
-        # all lines are printed in color.
         self._isolate = isolate
-
-        # Our current state.
         self._state = State.no_idea
-
-        # The filename of the line we're currently printing.
         self._file = None
-
-        # The buffer that we use to build up the output in.
         self._buffer = ""
-
-        # Whether to print variables for stack frames.
         self._show_vars = show_vars
-
-        # Max length of printed variable lines
         self._max_length = max_length
-
         self._load_config()
 
         self.pygments_lexer = PythonLexer()
@@ -109,11 +95,9 @@ class TBVaccine:
         """
         Decide whether the file in the traceback is one in our code_dir or not.
         """
-        if "site-packages" in self._file:
-            return False
-        return self._file.startswith(self._code_dir) or (
-            sys.platform != "win32" and not self._file.startswith("/")
-        )
+
+        return "/site-packages/" not in self._file
+        # return self._file.startswith(self._code_dir) or (sys.platform != "win32" and not self._file.startswith("/"))
 
     def _process_var_line(self, line):
         """
