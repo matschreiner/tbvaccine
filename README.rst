@@ -1,6 +1,9 @@
 TBVaccine
 ---------
 
+In this fork when isolated=True only files that are not in sitepackages are shown
+
+
 .. image:: https://www.codeshelter.co/static/badges/badge-flat.svg
     :target: https://www.codeshelter.co
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
